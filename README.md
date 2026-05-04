@@ -118,12 +118,6 @@ Activar entorno virtual en Windows PowerShell:
 .\venv\Scripts\activate
 ```
 
-Actualizar pip:
-
-```bash
-python -m pip install --upgrade pip
-```
-
 Instalar dependencias:
 
 ```bash
@@ -141,14 +135,6 @@ Contenido:
 ```env
 GROQ_API_KEY=coloca_tu_api_key_aqui
 ```
-
-También se recomienda dejar un archivo `.env.example` para que otros integrantes sepan qué variable configurar:
-
-```env
-GROQ_API_KEY=coloca_tu_api_key_aqui
-```
-
-> Importante: el archivo `.env` real no debe subirse a GitHub.
 
 ---
 
@@ -252,16 +238,6 @@ npm install
 
 Crear archivo `.env` dentro de `frontend`:
 
-```env
-VITE_API_URL=http://localhost:8000
-```
-
-También se recomienda crear un archivo `.env.example`:
-
-```env
-VITE_API_URL=http://localhost:8000
-```
-
 ---
 
 ## Ejecutar el frontend
@@ -271,13 +247,6 @@ Desde la carpeta `frontend`, ejecutar:
 ```bash
 npm run dev
 ```
-
-El frontend normalmente estará disponible en:
-
-```txt
-http://localhost:5173
-```
-
 ---
 
 ## Flujo de uso
