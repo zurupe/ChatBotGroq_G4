@@ -1,7 +1,13 @@
 import { useRef, useState } from "react";
 import { subirArchivo } from "../services/api";
 
-const extensionesPermitidas = [".pdf", ".docx", ".xlsx", ".xls", ".txt"];
+const extensionesPermitidas = [
+  ".pdf",
+  ".docx",
+  ".xlsx",
+  ".xls",
+  ".txt",
+];
 
 export default function FileUpload() {
   const [archivo, setArchivo] = useState(null);
@@ -14,10 +20,13 @@ export default function FileUpload() {
 
   const validarArchivo = (file) => {
     const nombre = file.name.toLowerCase();
-    return extensionesPermitidas.some((ext) => nombre.endsWith(ext));
+
+    return extensionesPermitidas.some((ext) =>
+      nombre.endsWith(ext)
+    );
   };
 
-  const procesarArchivo = (file) => {
+  const seleccionarArchivo = (file) => {
     setEstado("");
     setError("");
 
@@ -25,24 +34,37 @@ export default function FileUpload() {
 
     if (!validarArchivo(file)) {
       setArchivo(null);
-      setError("Formato no permitido. Usa PDF, Word, Excel o TXT.");
+
+      setError(
+        "Formato no permitido. Usa PDF, Word, Excel o TXT."
+      );
+
       return;
     }
 
     setArchivo(file);
   };
 
-  const handleSeleccionArchivo = (event) => {
-    const file = event.target.files[0];
-    procesarArchivo(file);
+  const handleSeleccionArchivo = (e) => {
+    const file = e.target.files[0];
+
+    seleccionarArchivo(file);
   };
 
-  const handleDrop = (event) => {
-    event.preventDefault();
+  const handleDrop = (e) => {
+    e.preventDefault();
+
     setDragging(false);
 
-    const file = event.dataTransfer.files[0];
-    procesarArchivo(file);
+    if (e.dataTransfer.files &&
+        e.dataTransfer.files.length > 0) {
+
+      const file = e.dataTransfer.files[0];
+
+      seleccionarArchivo(file);
+
+      e.dataTransfer.clearData();
+    }
   };
 
   const handleSubirArchivo = async () => {
@@ -53,20 +75,28 @@ export default function FileUpload() {
 
     try {
       setCargando(true);
+
       setError("");
+
       setEstado("Procesando archivo...");
 
       const resultado = await subirArchivo(archivo);
 
-      setEstado(`Archivo "${resultado.filename}" procesado correctamente.`);
+      setEstado(
+        `Archivo "${resultado.filename}" procesado correctamente.`
+      );
+
       setArchivo(null);
 
       if (inputRef.current) {
         inputRef.current.value = "";
       }
+
     } catch (err) {
       setError(err.message);
+
       setEstado("");
+
     } finally {
       setCargando(false);
     }
@@ -77,8 +107,8 @@ export default function FileUpload() {
       <h2>Ingesta de conocimiento</h2>
 
       <p className="section-description">
-        Sube documentos para que el chatbot pueda responder
-        con base en esa información.
+        Sube documentos para que el chatbot
+        responda usando esa información.
       </p>
 
       <div
@@ -91,27 +121,29 @@ export default function FileUpload() {
         onDragLeave={() => setDragging(false)}
         onDrop={handleDrop}
       >
-        <div className="upload-icon">📂</div>
+        <div className="upload-icon">
+          📂
+        </div>
 
-        <p>Arrastra archivos aquí</p>
+        <p>Arrastra documentos aquí</p>
 
         <span>
-          o haz clic para seleccionar documentos
+          o haz clic para seleccionar archivos
         </span>
 
         <input
           ref={inputRef}
           type="file"
+          hidden
           accept=".pdf,.docx,.xlsx,.xls,.txt"
           onChange={handleSeleccionArchivo}
           disabled={cargando}
-          hidden
         />
       </div>
 
       {archivo && (
         <div className="selected-file">
-          <strong>Archivo seleccionado:</strong>
+          <strong>Archivo seleccionado</strong>
 
           <span>{archivo.name}</span>
         </div>
@@ -122,7 +154,9 @@ export default function FileUpload() {
         onClick={handleSubirArchivo}
         disabled={cargando}
       >
-        {cargando ? "Procesando..." : "Subir documento"}
+        {cargando
+          ? "Procesando..."
+          : "Subir documento"}
       </button>
 
       {estado && (
