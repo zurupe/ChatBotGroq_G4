@@ -34,7 +34,7 @@ async def ingest_document(file: UploadFile = File(...)):
         
         # 2. Llamar al servicio de ingesta
         # Nota: SimpleDirectoryReader procesará el archivo en UPLOAD_DIR
-        resultado = procesar_y_almacenar(UPLOAD_DIR)
+        resultado = procesar_y_almacenar(file_path)
         
         # 3. Limpiar el archivo temporal tras procesarlo
         os.remove(file_path)

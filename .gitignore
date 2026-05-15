@@ -53,10 +53,16 @@ backend/__pycache__/
 htmlcov/
 
 # Archivos temporales del backend
-temp_uploads/
-backend/temp_uploads/
-uploads/
-backend/uploads/
+temp_uploads/*
+backend/temp_uploads/*
+uploads/*
+backend/uploads/*
+
+# Mantener carpetas vacías necesarias
+!temp_uploads/.gitkeep
+!backend/temp_uploads/.gitkeep
+!uploads/.gitkeep
+!backend/uploads/.gitkeep
 
 # Base vectorial / datos generados
 data/

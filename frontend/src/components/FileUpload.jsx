@@ -96,7 +96,7 @@ export default function FileUpload() {
       {error && <p className="error-message">{error}</p>}
 
       <div className="allowed-files">
-        Formatos permitidos: PDF, Word, Excel y TXT.
+        Formatos permitidos: PDF, Word, y TXT.
       </div>
     </section>
   );
