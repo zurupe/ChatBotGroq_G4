@@ -22,9 +22,10 @@ export default function App() {
           </p>
         </div>
 
-        <button onClick={() => setDarkMode(!darkMode)}>
-          {darkMode ? "Claro" : "Oscuro"}
-        </button>
+        <button
+              className="theme-toggle"
+              onClick={() => setDarkMode(!darkMode)}
+        ></button>
 
         <BackendStatus />
       </header>

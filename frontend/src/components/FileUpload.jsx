@@ -8,6 +8,7 @@ export default function FileUpload() {
   const [estado, setEstado] = useState("");
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
+  const [dragging, setDragging] = useState(false);
 
   const inputRef = useRef(null);
 
@@ -16,9 +17,7 @@ export default function FileUpload() {
     return extensionesPermitidas.some((ext) => nombre.endsWith(ext));
   };
 
-  const handleSeleccionArchivo = (event) => {
-    const file = event.target.files[0];
-
+  const procesarArchivo = (file) => {
     setEstado("");
     setError("");
 
@@ -31,6 +30,19 @@ export default function FileUpload() {
     }
 
     setArchivo(file);
+  };
+
+  const handleSeleccionArchivo = (event) => {
+    const file = event.target.files[0];
+    procesarArchivo(file);
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    setDragging(false);
+
+    const file = event.dataTransfer.files[0];
+    procesarArchivo(file);
   };
 
   const handleSubirArchivo = async () => {
@@ -63,40 +75,70 @@ export default function FileUpload() {
   return (
     <section className="card upload-card">
       <h2>Ingesta de conocimiento</h2>
+
       <p className="section-description">
-        Sube documentos para que el chatbot pueda responder con base en esa información.
+        Sube documentos para que el chatbot pueda responder
+        con base en esa información.
       </p>
 
-      <div className="file-box">
+      <div
+        className={`drop-zone ${dragging ? "dragging" : ""}`}
+        onClick={() => inputRef.current.click()}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragging(true);
+        }}
+        onDragLeave={() => setDragging(false)}
+        onDrop={handleDrop}
+      >
+        <div className="upload-icon">📂</div>
+
+        <p>Arrastra archivos aquí</p>
+
+        <span>
+          o haz clic para seleccionar documentos
+        </span>
+
         <input
           ref={inputRef}
           type="file"
           accept=".pdf,.docx,.xlsx,.xls,.txt"
           onChange={handleSeleccionArchivo}
           disabled={cargando}
+          hidden
         />
-
-        {archivo && (
-          <div className="selected-file">
-            <strong>Archivo seleccionado:</strong>
-            <span>{archivo.name}</span>
-          </div>
-        )}
       </div>
 
+      {archivo && (
+        <div className="selected-file">
+          <strong>Archivo seleccionado:</strong>
+
+          <span>{archivo.name}</span>
+        </div>
+      )}
+
       <button
-        className="primary-button"
+        className="primary-button upload-button"
         onClick={handleSubirArchivo}
         disabled={cargando}
       >
-        {cargando ? "Procesando..." : "Subir e ingestar"}
+        {cargando ? "Procesando..." : "Subir documento"}
       </button>
 
-      {estado && <p className="success-message">{estado}</p>}
-      {error && <p className="error-message">{error}</p>}
+      {estado && (
+        <p className="success-message">
+          {estado}
+        </p>
+      )}
+
+      {error && (
+        <p className="error-message">
+          {error}
+        </p>
+      )}
 
       <div className="allowed-files">
-        Formatos permitidos: PDF, Word, Excel y TXT.
+        PDF • Word • Excel • TXT
       </div>
     </section>
   );
