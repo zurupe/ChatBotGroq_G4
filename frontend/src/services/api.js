@@ -26,6 +26,7 @@ export async function subirArchivo(file) {
   const data = await response.json();
 
   if (!response.ok) {
+
     throw new Error(
       "No se pudo procesar el archivo. Revisa el formato o intenta con otro documento."
     );
